@@ -1,16 +1,16 @@
 {
-    "name": "hmitech/cms",
+    "name": "hmitech/hcms",
     "description": "Pacote para gerenciamento de componentes estilo CMS",
     "type": "library",
     "autoload": {
         "psr-4": {
-            "HmiTech\\Cms\\": "src/"
+            "Hcms\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "HmiTech\\Cms\\Providers\\CmsServiceProvider"
+                "Hcms\\Providers\\HcmsServiceProvider"
             ]
         }
     },

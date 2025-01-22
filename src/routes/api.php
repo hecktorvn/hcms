@@ -1,6 +1,6 @@
 <?php
 
-use HmiTech\Cms\Http\Controllers\TemplateController;
+use Hcms\Http\Controllers\TemplateController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('cms')

@@ -1,17 +1,19 @@
 <?php
 
-namespace HmiTech\Cms\Providers;
+namespace Hcms\Providers;
 
-use HmiTech\Cms\Database\Models\TemplateSettings;
+use Hcms\Database\Models\TemplateSettings;
 use Illuminate\Support\Facades\Context;
 use Inertia\Inertia;
 use Illuminate\Support\ServiceProvider;
 
 class CmsServiceProvider extends ServiceProvider
 {
+    static string $currentTemplate = 'default';
+
     public function boot(): void
     {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'cms');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'hcms');
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
 
         $this->configurePublishes();
@@ -30,8 +32,11 @@ class CmsServiceProvider extends ServiceProvider
         });
 
         Inertia::share([
-            'cmsTemplates'     => config('cms.templates'),
-            'templateSettings' => Context::getHidden('templateSettings'),
+            'hcms' => [
+                'currentTemplate' => static::$currentTemplate,
+                'templates'       => config('hcms.templates'),
+                'settings'        => Context::getHidden('templateSettings'),
+            ]
         ]);
     }
 
@@ -45,12 +50,12 @@ class CmsServiceProvider extends ServiceProvider
         ], 'migrations');
 
         $this->publishes([
-            $packagePath . '/config/cms.php' => config_path('cms.php'),
+            $packagePath . '/config/hcms.php' => config_path('hcms.php'),
         ], 'config');
 
         $this->publishes([
-            $sourcePath . '/resources/views' => resource_path('views/vendor/cms'),
-            $sourcePath . '/resources/js' => resource_path('js/vendor/cms'),
+            $sourcePath . '/resources/views' => resource_path('views/vendor/hcms'),
+            $sourcePath . '/resources/js' => resource_path('js/vendor/hcms'),
         ], 'vite-assets');
     }
 }
