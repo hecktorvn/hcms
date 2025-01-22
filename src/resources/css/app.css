@@ -1,0 +1,9 @@
+.cms-templates input,
+.cms-templates select,
+.cms-templates textarea {
+    @apply !rounded-md !border !border-gray-300 disabled:cursor-not-allowed disabled:bg-gray-100;
+}
+
+.cms-templates button {
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+}
