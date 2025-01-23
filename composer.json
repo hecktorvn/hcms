@@ -4,13 +4,13 @@
     "type": "library",
     "autoload": {
         "psr-4": {
-            "Hcms\\": "src/"
+            "HmiTech\\Hcms\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Hcms\\Providers\\HcmsServiceProvider"
+                "HmiTech\\Hcms\\Providers\\HcmsServiceProvider"
             ]
         }
     },

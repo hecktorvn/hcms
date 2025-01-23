@@ -1,6 +1,6 @@
 <?php
 
-namespace Hcms\Database\Models;
+namespace HmiTech\Hcms\Database\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

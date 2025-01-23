@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <div v-if="selectedTemplate" class="flex h-full border">
+    <div v-if="selectedTemplate && currentTemplate" class="flex h-full border">
       <div class="min-w-[300px] border-r p-5">
         <h1 class="text-xs">
           Template.: <b>{{ currentTemplate.name }}</b>

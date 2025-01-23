@@ -1,8 +1,8 @@
 <?php
 
-namespace Hcms\Http\Controllers;
+namespace HmiTech\Hcms\Http\Controllers;
 
-use Hcms\Database\Models\TemplateSettings;
+use HmiTech\Hcms\Database\Models\TemplateSettings;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 

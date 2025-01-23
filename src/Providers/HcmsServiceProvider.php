@@ -1,13 +1,13 @@
 <?php
 
-namespace Hcms\Providers;
+namespace HmiTech\Hcms\Providers;
 
-use Hcms\Database\Models\TemplateSettings;
+use HmiTech\Hcms\Database\Models\TemplateSettings;
 use Illuminate\Support\Facades\Context;
 use Inertia\Inertia;
 use Illuminate\Support\ServiceProvider;
 
-class CmsServiceProvider extends ServiceProvider
+class HcmsServiceProvider extends ServiceProvider
 {
     static string $currentTemplate = 'default';
 

@@ -1,14 +1,16 @@
 <template>
   <button
     v-if="!showSettings"
+    style="z-index: 500"
     @click="showSettings = !showSettings"
     class="fixed left-0 top-5 rounded-r-md bg-gray-500 p-2 px-3 text-xs text-white shadow"
   >
-    Edit
+    {{ $t("Edit") }}
   </button>
   <div
     v-show="showSettings"
-    class="cms-templates fixed left-0 top-0 z-50 h-screen bg-white shadow"
+    style="z-index: 500"
+    class="cms-templates fixed left-0 top-0 h-screen bg-white shadow"
   >
     <div class="flex justify-between gap-5 p-5">
       <div class="flex gap-4 divide-x">
@@ -26,18 +28,15 @@
       </div>
 
       <button
-        class="rounded-md border px-3 py-2"
+        class="rounded-md border px-3 py-2 text-xs"
         @click="showSettings = !showSettings"
       >
-        Close
+        {{ $t("Close") }}
       </button>
     </div>
 
     <div v-if="currentTemplate" class="flex h-full border-t">
-      <div
-        class="w-full max-w-[250px] p-5"
-        :class="{ 'border-r': currentSection }"
-      >
+      <div class="w-full min-w-80 p-5" :class="{ 'border-r': currentSection }">
         <h1 class="text-xs">
           Template.: <b>{{ currentTemplate.name }}</b>
         </h1>
@@ -46,13 +45,14 @@
           @change="showSection"
         />
       </div>
-      <div class="w-screen max-w-screen-sm grow" v-if="currentSection !== null">
+      <div class="w-screen max-w-[400px] grow" v-if="currentSection !== null">
         <TemplateSectionFields
-          cols="1"
           @save="saveSectionFields"
+          @cancel="showSection(null)"
           :section="currentSection"
           :template="selectedTemplate"
           :fields="currentTemplate.sections[currentSection].fields"
+          :cols="currentTemplate.sections[currentSection]?.cols ?? 1"
         />
       </div>
     </div>
@@ -60,12 +60,12 @@
 </template>
 
 <script setup>
-import { ref, computed, provide } from 'vue';
-import { usePage } from '@inertiajs/vue3';
+import { ref, computed, provide } from "vue";
+import { usePage } from "@inertiajs/vue3";
 
-import TemplateSections from './TemplateSections.vue';
-import TemplateSectionFields from './TemplateSectionFields.vue';
-import axios from 'axios';
+import TemplateSections from "./TemplateSections.vue";
+import TemplateSectionFields from "./TemplateSectionFields.vue";
+import axios from "axios";
 
 const page = usePage();
 const saving = ref(false);
@@ -73,14 +73,14 @@ const showSettings = ref(false);
 const currentSection = ref(null);
 const selectedTemplate = ref(page.props.hcms.currentTemplate);
 
-provide('saving', saving);
+provide("saving", saving);
 
-const emit = defineEmits('save:settings');
+const emit = defineEmits("save:settings");
 
 const templates = computed(() => page.props.hcms.templates);
 const currentTemplate = computed(() => templates.value[selectedTemplate.value]);
 
-provide('currentTemplate', currentTemplate);
+provide("currentTemplate", currentTemplate);
 
 const showSection = (index) => {
   currentSection.value = index;
@@ -91,14 +91,14 @@ const saveSectionFields = (fields) => {
 
   axios
     .put(
-      route('cms.template.update', {
+      route("cms.template.update", {
         template: selectedTemplate.value,
         section: currentSection.value,
       }),
-      fields,
+      fields
     )
     .then(() => {
-      emit('saved:settings', {
+      emit("saved:settings", {
         fields,
         section: currentSection.value,
         selectedTemplate: selectedTemplate.value,
