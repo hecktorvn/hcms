@@ -4,6 +4,7 @@ namespace HmiTech\Hcms\Providers;
 
 use HmiTech\Hcms\Database\Models\TemplateSettings;
 use Illuminate\Support\Facades\Context;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 use Illuminate\Support\ServiceProvider;
 
@@ -27,15 +28,18 @@ class HcmsServiceProvider extends ServiceProvider
 
     public function shareTemplateConfig(): void
     {
-        Context::addHidden('templateSettings', function() {
-            return TemplateSettings::get()->groupBy('template')->toArray();
-        });
+        $templateSettings = [];
+
+        if(Schema::hasTable('template_settings')) {
+            $templateSettings = TemplateSettings::get()->groupBy('template')->toArray();
+            Context::addHidden('templateSettings', $templateSettings);
+        }
 
         Inertia::share([
             'hcms' => [
                 'currentTemplate' => static::$currentTemplate,
                 'templates'       => config('hcms.templates'),
-                'settings'        => Context::getHidden('templateSettings'),
+                'settings'        => $templateSettings,
             ]
         ]);
     }

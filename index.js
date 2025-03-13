@@ -1,20 +1,29 @@
-import { usePage } from "@inertiajs/vue3";
 import SectionsGrid from "./src/resources/js/components/SectionsGrid.vue";
 import SectionsSidebar from "./src/resources/js/components/SectionsSidebar.vue";
-import { wTrans } from "laravel-vue-i18n";
+import { trans } from "laravel-vue-i18n";
 import Vue3ColorPicker from "vue3-colorpicker";
 import "vue3-colorpicker/style.css";
+import { getCurrentInstance, ref } from "vue";
+
+const hcmsInstance = ref(null);
 
 export const hcms = (key, defaultValue) => {
-    const hcms = usePage().props.hcms;
-    const settings = hcms.settings[hcms.currentTemplate] ?? [];
+  if(hcmsInstance.value) {
+    return hcmsInstance.value(key, defaultValue);
+  }
 
-    const [section, field] = key.split(".");
-    const config = settings.find((item) => item.section === section)?.config ?? {};
+  return getCurrentInstance().appContext.config.globalProperties.$hcms(key, defaultValue);
+};
 
-    const value = config[field] ?? defaultValue;
+const translate = (config, key, defaultValue) => {
+  const {currentTemplate} = config;
+  const settings = config.settings[currentTemplate] ?? [];
 
-    return wTrans(value.length ? value : defaultValue).value;
+  const [section, field] = key.split(".");
+  config = settings.find((item) => item.section === section)?.config ?? {};
+
+  const value = config[field] ?? defaultValue;
+  return trans(value.length ? value : defaultValue) || defaultValue;
 };
 
 export default {
@@ -23,7 +32,12 @@ export default {
       .use(Vue3ColorPicker)
       .component("template-sections", SectionsGrid)
       .component("template-sections:sidebar", SectionsSidebar);
+      
+    hcmsInstance.value = (key, defaultValue) => {
+      const pageProps = app.config.globalProperties.$page.props;
+      return translate(pageProps.hcms, key, defaultValue);
+    };
 
-    app.config.globalProperties.$hcms = hcms;
+    app.config.globalProperties.$hcms = hcmsInstance.value;
   },
 };

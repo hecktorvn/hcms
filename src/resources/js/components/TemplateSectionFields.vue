@@ -33,11 +33,11 @@
 </template>
 
 <script setup>
-import { usePage } from "@inertiajs/vue3";
-import { computed, inject, ref } from "vue";
+import { computed, inject, ref, getCurrentInstance } from "vue";
 import InputPicker from "./InputPicker.vue";
 
-const page = usePage();
+const page = getCurrentInstance().appContext.config.globalProperties.$page;
+
 const saving = inject("saving");
 const emit = defineEmits(["save", "cancel"]);
 
@@ -73,6 +73,10 @@ const save = () => {
     settings.find(({ section }) => section === props.section) ?? {};
 
   if (!currentSection.config) {
+    if(typeof page.props.hcms.settings[props.template] !== 'Object') {
+      page.props.hcms.settings[props.template] = [];
+    }
+
     page.props.hcms.settings[props.template].push({
       section: props.section,
       config: Object.fromEntries(formData),

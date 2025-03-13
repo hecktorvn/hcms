@@ -40,14 +40,14 @@
 </template>
 
 <script setup>
-import { ref, computed, provide } from 'vue';
-import { usePage } from '@inertiajs/vue3';
+import { ref, computed, provide, getCurrentInstance } from 'vue';
 
 import TemplateSections from './TemplateSections.vue';
 import TemplateSectionFields from './TemplateSectionFields.vue';
 import axios from 'axios';
 
-const page = usePage();
+const page = getCurrentInstance().appContext.config.globalProperties.$page;
+
 const saving = ref(false);
 const currentSection = ref(null);
 const selectedTemplate = ref(page.props.hcms.currentTemplate);

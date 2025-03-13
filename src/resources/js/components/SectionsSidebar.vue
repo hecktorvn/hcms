@@ -1,6 +1,53 @@
+<script setup>
+import { ref, computed, provide, getCurrentInstance } from "vue";
+import TemplateSections from "./TemplateSections.vue";
+import TemplateSectionFields from "./TemplateSectionFields.vue";
+import axios from "axios";
+
+const page = getCurrentInstance().appContext.config.globalProperties.$page;
+
+const saving = ref(false);
+const showSettings = ref(false);
+const currentSection = ref(null);
+const selectedTemplate = ref(page.props.hcms.currentTemplate);
+
+provide("saving", saving);
+
+const emit = defineEmits("save:settings");
+
+const templates = computed(() => page.props.hcms.templates);
+const currentTemplate = computed(() => templates.value[selectedTemplate.value]);
+
+provide("currentTemplate", currentTemplate);
+
+const showSection = (index) => {
+  currentSection.value = index;
+};
+
+const saveSectionFields = (fields) => {
+  saving.value = true;
+
+  axios.put(
+      route("cms.template.update", {
+        template: selectedTemplate.value,
+        section: currentSection.value,
+      }),
+      fields
+    )
+    .then(() => {
+      emit("saved:settings", {
+        fields,
+        section: currentSection.value,
+        selectedTemplate: selectedTemplate.value,
+      });
+    })
+    .finally(() => {
+      saving.value = false;
+    });
+};
+</script>
 <template>
   <button
-    v-if="!showSettings"
     style="z-index: 500"
     @click="showSettings = !showSettings"
     class="fixed left-0 top-5 rounded-r-md bg-gray-500 p-2 px-3 text-xs text-white shadow"
@@ -58,54 +105,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref, computed, provide } from "vue";
-import { usePage } from "@inertiajs/vue3";
-
-import TemplateSections from "./TemplateSections.vue";
-import TemplateSectionFields from "./TemplateSectionFields.vue";
-import axios from "axios";
-
-const page = usePage();
-const saving = ref(false);
-const showSettings = ref(false);
-const currentSection = ref(null);
-const selectedTemplate = ref(page.props.hcms.currentTemplate);
-
-provide("saving", saving);
-
-const emit = defineEmits("save:settings");
-
-const templates = computed(() => page.props.hcms.templates);
-const currentTemplate = computed(() => templates.value[selectedTemplate.value]);
-
-provide("currentTemplate", currentTemplate);
-
-const showSection = (index) => {
-  currentSection.value = index;
-};
-
-const saveSectionFields = (fields) => {
-  saving.value = true;
-
-  axios
-    .put(
-      route("cms.template.update", {
-        template: selectedTemplate.value,
-        section: currentSection.value,
-      }),
-      fields
-    )
-    .then(() => {
-      emit("saved:settings", {
-        fields,
-        section: currentSection.value,
-        selectedTemplate: selectedTemplate.value,
-      });
-    })
-    .finally(() => {
-      saving.value = false;
-    });
-};
-</script>
