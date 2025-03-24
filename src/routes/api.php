@@ -1,6 +1,6 @@
 <?php
 
-use HmiTech\Hcms\Http\Controllers\TemplateController;
+use Hecktorvn\Hcms\Http\Controllers\TemplateController;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;

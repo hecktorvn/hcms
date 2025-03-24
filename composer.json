@@ -1,18 +1,22 @@
 {
-    "name": "hmitech/hcms",
+    "name": "hecktorvn/hcms",
     "description": "Pacote para gerenciamento de componentes estilo CMS",
     "type": "library",
     "autoload": {
         "psr-4": {
-            "HmiTech\\Hcms\\": "src/"
+            "Hecktorvn\\Hcms\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "HmiTech\\Hcms\\Providers\\HcmsServiceProvider"
+                "Hecktorvn\\Hcms\\Providers\\HcmsServiceProvider"
             ]
         }
     },
-    "require": {}
+    "require": {
+        "php": "^8.2",
+        "inertiajs/inertia-laravel": "^2.0",
+        "laravel/framework": "^10.0"
+    }
 }

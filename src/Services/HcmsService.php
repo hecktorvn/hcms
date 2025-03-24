@@ -1,8 +1,8 @@
 <?php
 
-namespace HmiTech\Hcms\Services;
+namespace Hecktorvn\Hcms\Services;
 
-use HmiTech\Hcms\Database\Models\TemplateSettings;
+use Hecktorvn\Hcms\Database\Models\TemplateSettings;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\Schema;
 

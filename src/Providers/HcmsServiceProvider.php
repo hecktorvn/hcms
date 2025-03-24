@@ -1,8 +1,8 @@
 <?php
 
-namespace HmiTech\Hcms\Providers;
+namespace Hecktorvn\Hcms\Providers;
 
-use HmiTech\Hcms\Services\HcmsService;
+use Hecktorvn\Hcms\Services\HcmsService;
 use Illuminate\Support\ServiceProvider;
 
 class HcmsServiceProvider extends ServiceProvider
