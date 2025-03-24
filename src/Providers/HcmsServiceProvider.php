@@ -2,46 +2,22 @@
 
 namespace HmiTech\Hcms\Providers;
 
-use HmiTech\Hcms\Database\Models\TemplateSettings;
-use Illuminate\Support\Facades\Context;
-use Illuminate\Support\Facades\Schema;
-use Inertia\Inertia;
+use HmiTech\Hcms\Services\HcmsService;
 use Illuminate\Support\ServiceProvider;
 
 class HcmsServiceProvider extends ServiceProvider
 {
-    static string $currentTemplate = 'default';
-
     public function boot(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'hcms');
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
 
         $this->configurePublishes();
-        $this->shareTemplateConfig();
     }
 
     public function register(): void
     {
-        // Registra bindings
-    }
-
-    public function shareTemplateConfig(): void
-    {
-        $templateSettings = [];
-
-        if(Schema::hasTable('template_settings')) {
-            $templateSettings = TemplateSettings::get()->groupBy('template')->toArray();
-            Context::addHidden('templateSettings', $templateSettings);
-        }
-
-        Inertia::share([
-            'hcms' => [
-                'currentTemplate' => static::$currentTemplate,
-                'templates'       => config('hcms.templates'),
-                'settings'        => $templateSettings,
-            ]
-        ]);
+        $this->app->singleton(HcmsService::class, fn() => new HcmsService());
     }
 
     public function configurePublishes(): void

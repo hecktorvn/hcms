@@ -15,7 +15,7 @@ export const hcms = (key, defaultValue) => {
   return getCurrentInstance().appContext.config.globalProperties.$hcms(key, defaultValue);
 };
 
-const translate = (config, key, defaultValue) => {
+const translate = (config, key, defaultValue) => { 
   const {currentTemplate} = config;
   const settings = config.settings[currentTemplate] ?? [];
 
